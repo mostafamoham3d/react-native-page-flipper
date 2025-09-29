@@ -52,21 +52,22 @@ export const createPages = ({
     return allPages;
 };
 
-type RNTransform = Exclude<TransformsStyle['transform'], undefined>;
+export type RNTransform = Exclude<TransformsStyle['transform'], undefined>;
 
 export const transformOrigin = (
-    { x, y }: { x: number; y: number },
-    transformations: RNTransform
+  { x, y }: { x: number; y: number },
+  transformations: RNTransform
 ): RNTransform => {
-    'worklet';
-    return [
-        { translateX: x },
-        { translateY: y },
-        ...transformations,
-        { translateX: -x },
-        { translateY: -y },
-    ];
+  'worklet';
+  return [
+    { translateX: x },
+    { translateY: y },
+    ...(transformations ?? []),
+    { translateX: -x },
+    { translateY: -y },
+  ] as RNTransform;
 };
+
 
 const debug = (msg: string, val: any) => {
     console.log(msg, val);

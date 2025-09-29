@@ -6,6 +6,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import { Gradient } from '../Components/Gradient';
 import { transformOrigin } from '../utils/utils';
+import type { RNTransform } from '../utils/utils';
 
 type FrontShadowProps = {
     degrees: Animated.SharedValue<number>;
@@ -44,20 +45,22 @@ const FrontShadow: React.FC<FrontShadowProps> = ({
         };
     });
 
-    const animatedStyle2 = useAnimatedStyle(() => {
-        const scaleX = interpolate(
-            degrees.value,
-            [-150, 0, 150],
-            [6, 1, 6],
-            Extrapolate.CLAMP
-        );
+const animatedStyle2 = useAnimatedStyle(() => {
+    const scaleX = interpolate(
+        degrees.value,
+        [-150, 0, 150],
+        [6, 1, 6],
+        Extrapolate.CLAMP
+    );
 
-        return {
-            transform: [
-                ...transformOrigin({ x: -shadowWidth / 2, y: 0 }, [{ scaleX }]),
-            ],
-        };
-    });
+    return {
+        transform: transformOrigin(
+            { x: -shadowWidth / 2, y: 0 },
+            [{ scaleX: scaleX }]
+        ) as RNTransform,  // 👈 cast to your custom RNTransform type
+    };
+});
+
 
     return (
         <Animated.View
